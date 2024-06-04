@@ -1,5 +1,6 @@
 import pandas as pd
 import time
+import math
 
 class Objet:
     def __init__(self, nom, masse, utilite):
@@ -7,6 +8,8 @@ class Objet:
         self.masse = masse
         self.utilite = utilite
 
+    def ratio(self):
+        return self.utilite/math.sqrt(self.masse)
     def print(self):
         print(f'{self.nom} ; {self.masse} ; {self.utilite}')
 
@@ -86,6 +89,15 @@ def brute_force_avec_Obj(objects_list:list, backpack_size:float):
 
 
 
+def glouton(objects_list:list, backpack_size:float):
+    EPSILON = 0.00001
+    sorted_by_ratio = sorted(objects_list, key=lambda k: k.ratio(), reverse=True)
+    bag = Bag()
+    i = 0
+    while((bag.weight + sorted_by_ratio[i].masse) < backpack_size + EPSILON):
+        bag.add(sorted_by_ratio[i])
+        i+=1
+    return bag
 
 
 
@@ -96,66 +108,32 @@ def brute_force_avec_Obj(objects_list:list, backpack_size:float):
 
 
 
-
-
-
-
-
-
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-
+def brute_force_demo():
     data = pd.read_csv("sac2.csv", sep=';', decimal=',')
     data = data.values.tolist()
-    # dict = {}
-    # for elt in data:
-    #     if elt != []:
-    #         dict[elt[0] ]= (float(elt[1]), float(elt[2]))
-    #
-    # print(dict)
     objs = []
-    #print(data)
     for elt in data:
         #print(*elt)
         o = Objet(*elt)
         objs.append(o)
-        #o.print()
-        #o.nom, o.masse, o.utilite = elt
-
-    #print (objs[0].nom)
-
-    """    ob = Objet("test", 2, 25)
-    ob.print()
-    bag = Bag()
-    bag.add(ob)
-    bag.print()
-    ob2 = Objet("test2", 3, 4)
-    bag.add(ob2)
-    bag.print()"""
-
-
-#    start_time = time.time()
-    # for i in range(10000):
-    #     algo_concon(data, 0.6)
-    # end_time = time.time()
-    # print(f'start : {start_time}, ')
-    # print(f'Temps d\'exécution en secondes pour 10000 * la fonc: {(end_time-start_time)/1}; en ms : {(end_time-start_time)*1000/1}')# pour avoir une moyenne
-
     start_time = time.time()
-    #a = brute_force_avec_Obj(data, 0.6)
     b = brute_force_avec_Obj(objs, 0.6)
-    #print(a)
-    ##print(max_sum_element_n_bis(a, 1))
     end_time = time.time()
     print(len(b))
     best = max(b, key=lambda k: k.score)
     best.print()
-    """for sac in b:
-        sac.print()
-        print('\n\n\n')"""
+    print(f'Temps d\'exécution en secondes pour  * la fonc: {(end_time - start_time) / 1}; en ms : {(end_time - start_time) * 1000 / 1}')
 
-    print(f'Temps d\'exécution en secondes pour  * la fonc: {(end_time-start_time)/1}; en ms : {(end_time-start_time)*1000/1}')
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
+
+if __name__ == '__main__':
+    #brute_force_demo()
+
+    data = pd.read_csv("sac2.csv", sep=';', decimal=',')
+    data = data.values.tolist()
+    objs = []
+    for elt in data:
+        o = Objet(*elt)
+        objs.append(o)
+    glouton(objs, 0.6).print()

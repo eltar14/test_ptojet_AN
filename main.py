@@ -140,11 +140,3 @@ if __name__ == '__main__':
     end_time = time.time()
     best.print()
     print(f'Temps d\'exécution en secondes pour la fonction : {(end_time - start_time) / 1}; en ms : {(end_time - start_time) * 1000 / 1}')
-
-
-
-    # Branch and Bound avec arbre binaire
-    from BinaryTree import BinaryTree
-    ab = BinaryTree(0) # valeur score de zero car debut # a gauche les oui a droite les non
-
-

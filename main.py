@@ -98,6 +98,51 @@ def branch(objects_list:list, backpack_size:float):
 
 
 
+def dynamique(objets, maxmass):
+    """
+    code nathan
+    :param objets:
+    :param maxmass:
+    :return:
+    """
+    # multiplication par 100 pour ne pas avoir de float
+    for obj in objets:
+        obj.masse = int(obj.masse * 100)
+        obj.utilite = int(obj.utilite * 100)
+
+    maxmass = int(maxmass * 100)
+
+    # création tableau avec des 0
+    tab = [[0 for _ in range(maxmass + 1)] for _ in range(len(objets) + 1)]
+
+
+    for i in range(1, len(objets) + 1):
+        for w in range(maxmass + 1):
+
+            if objets[i - 1].masse <= w:
+                # on trouve le cas qui à le plus de valeur entre l'itération dernière et celle en cours
+                tab[i][w] = max(tab[i - 1][w], tab[i - 1][w - objets[i - 1].masse] + objets[i - 1].utilite)
+            else:
+                tab[i][w] = tab[i - 1][w]
+
+    # Reconstruire la solution pour trouver quels objets sont inclus
+    bag = Bag()
+    w = maxmass
+    for i in range(len(objets), 0, -1): # parcours des objets en sens inverse
+        if tab[i][w] != tab[i - 1][w]: # si différent c'est qu'a cet indice l'objet ajouté est optimale
+
+            bag.add(objets[i - 1])
+            w -= objets[i - 1].masse # on réduit la taille restante dans le sac
+
+    # on divise par 100 pour retrouver nos valeurs de bases
+    for obj in bag.content:
+        obj.masse /= 100
+        obj.utilite /= 100
+    bag.weight /= 100
+    bag.score /= 100
+
+    return bag
+
 
 
 
@@ -136,7 +181,7 @@ if __name__ == '__main__':
 
 
     # mesure des temps de calcul pour des poids de sac differents
-    C=[0.6, 2, 3, 4, 5, 6, 7]
+    C=[4] # 0.6, 2, 3, 4, 5, 6, 7
     times = []
 
     for val in C:

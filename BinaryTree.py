@@ -1,5 +1,20 @@
+#            /$$                                    /$$$$$$$  /$$                                      /$$$$$$$$
+#           | $$                                   | $$__  $$|__/                                     |__  $$__/
+#   /$$$$$$$| $$  /$$$$$$   /$$$$$$$ /$$$$$$$      | $$  \ $$ /$$ /$$$$$$$   /$$$$$$   /$$$$$$  /$$   /$$| $$  /$$$$$$   /$$$$$$   /$$$$$$
+#  /$$_____/| $$ |____  $$ /$$_____//$$_____/      | $$$$$$$ | $$| $$__  $$ |____  $$ /$$__  $$| $$  | $$| $$ /$$__  $$ /$$__  $$ /$$__  $$
+# | $$      | $$  /$$$$$$$|  $$$$$$|  $$$$$$       | $$__  $$| $$| $$  \ $$  /$$$$$$$| $$  \__/| $$  | $$| $$| $$  \__/| $$$$$$$$| $$$$$$$$
+# | $$      | $$ /$$__  $$ \____  $$\____  $$      | $$  \ $$| $$| $$  | $$ /$$__  $$| $$      | $$  | $$| $$| $$      | $$_____/| $$_____/
+# |  $$$$$$$| $$|  $$$$$$$ /$$$$$$$//$$$$$$$/      | $$$$$$$/| $$| $$  | $$|  $$$$$$$| $$      |  $$$$$$$| $$| $$      |  $$$$$$$|  $$$$$$$
+#  \_______/|__/ \_______/|_______/|_______/       |_______/ |__/|__/  |__/ \_______/|__/       \____  $$|__/|__/       \_______/ \_______/
+#                                                                                               /$$  | $$
+#                                                                                              |  $$$$$$/
+#                                                                                               \______/
+
 from Objet import  Objet
 class BinaryTree():
+    """
+    author : A
+    """
     def __init__(self, data):
         self.data = data
         self.left = None
@@ -7,6 +22,12 @@ class BinaryTree():
         self.parent = None
 
     def add_child(self, side:bool, data):
+        """
+        author : A
+        :param side:
+        :param data:
+        :return:
+        """
         if side:
             self.left = BinaryTree(data)
             self.left.parent = self
@@ -15,6 +36,10 @@ class BinaryTree():
             self.right.parent = self
 
     def get_level(self):
+        """
+        author : A
+        :return:
+        """
         level = 0
         node = self
         while node.parent is not None:
@@ -23,10 +48,18 @@ class BinaryTree():
         return level
 
     def get_parent(self):
+        """
+        author : A
+        :return:
+        """
         return self.parent
 
 
     def is_left_child(self):
+        """
+        author : A
+        :return:
+        """
         if self.parent is not None:
             return self.parent.left is self
         else:
@@ -36,6 +69,8 @@ class BinaryTree():
         """
         Returns a list of the the parents, 1 if they are a left child (we should put it in the bag) or a 0 if they're a
         right child (we should ignore it).
+
+        author : A
         :return: list of 0 and 1
         """
         parents = [0] * (self.get_level() + 1)
@@ -60,6 +95,8 @@ class BinaryTree():
     def find_max(self):
         """
         returns the max value and the instance of the node, in a tuple
+
+        author : A
         :return:
         """
         max_value = self.data
@@ -77,6 +114,14 @@ class BinaryTree():
         return max_value, max_node
 
     def create_tree(self, objects_list:list, backpack_size:float, util=0, weight = 0):
+        """
+        author : A
+        :param objects_list:
+        :param backpack_size:
+        :param util:
+        :param weight:
+        :return:
+        """
         if self.get_level() >= len(objects_list) :
             return
         depth = self.get_level()
@@ -87,6 +132,10 @@ class BinaryTree():
         self.right.create_tree(objects_list, backpack_size, util, weight)
 
 def print_tree(root, val="data", left="left", right="right"): # source : https://stackoverflow.com/questions/34012886/print-binary-tree-level-by-level-in-python#:~:text=I%20am%20leaving,your%20node%20definition.
+    """
+    used to quickly print a tree to check if it looks good.
+    from https://stackoverflow.com/questions/34012886/print-binary-tree-level-by-level-in-python#:~:text=I%20am%20leaving,your%20node%20definition
+    """
     def display(root, val=val, left=left, right=right):
         """Returns list of strings, width, height, and horizontal coordinate of the root."""
         # No child.

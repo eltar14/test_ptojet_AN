@@ -10,6 +10,12 @@ import numpy as np
 
 
 def algo_concon(objects_list:list, backpack_size:float): # 19 op
+    """
+    author : A
+    :param objects_list:
+    :param backpack_size:
+    :return:
+    """
     sac = []
     #print(objects_list)
     p = 0
@@ -21,39 +27,13 @@ def algo_concon(objects_list:list, backpack_size:float): # 19 op
 
     #print(f'Elements dans le sac : {sac}\nPoids : {p}')
 
-# def brute_force(objects_list:dict, backpack_size:float):
-#     """
-#     pas utilisé !
-#     :param objects_list:
-#     :param backpack_size:
-#     :return:
-#     """
-#     #print(objects_list)
-#     bags = []
-#     for i in range(2**len(objects_list)-1):
-#         bag = []
-#         binaire_sans_prefixe = bin(i)[2:].zfill(len(objects_list))
-#         #print(binaire_sans_prefixe)
-#         #print(binaire_sans_prefixe)
-#         for j in range(len(objects_list)):
-#             #print(binaire_sans_prefixe[j])
-#             #print(int(binaire_sans_prefixe[j]) == 1)
-#             if(int(binaire_sans_prefixe[j]) == 1):
-#                 bag.append(objects_list[j])
-#                 #print(objects_list[j])
-#         bags.append(bag)
-#         if(i>1000):
-#             break
-#     return bags
-
-
-
-
 
 
 def brute_force_binary(objects_list:list, backpack_size:float):
     """
     tests all the possible combinations and returns the bag with the highest score
+
+    author : A
     :param objects_list: list oh Objects, the available objects to put in the bag
     :param backpack_size: maximum bag mass/weight
     :return:
@@ -71,6 +51,12 @@ def brute_force_binary(objects_list:list, backpack_size:float):
 
 
 def glouton(objects_list:list, backpack_size:float):
+    """
+    author : A
+    :param objects_list:
+    :param backpack_size:
+    :return:
+    """
     EPSILON = 0.00001
     sorted_by_ratio = sorted(objects_list, key=lambda k: k.ratio(), reverse=True)
     bag = Bag()
@@ -81,6 +67,12 @@ def glouton(objects_list:list, backpack_size:float):
     return bag
 
 def branch(objects_list:list, backpack_size:float):
+    """
+    author : A
+    :param objects_list:
+    :param backpack_size:
+    :return:
+    """
     root = BinaryTree(0)
     root.create_tree(objs, backpack_size)
     vals = root.find_max()[1].get_parents_by_level()[1:]
@@ -100,7 +92,7 @@ def branch(objects_list:list, backpack_size:float):
 
 def dynamique(objets, maxmass):
     """
-    code nathan
+    author : nathan
     :param objets:
     :param maxmass:
     :return:

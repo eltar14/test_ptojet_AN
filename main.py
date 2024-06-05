@@ -4,6 +4,7 @@ import math
 from Objet import Objet
 from Bag import Bag
 from BinaryTree import BinaryTree
+import numpy as np
 
 
 
@@ -50,20 +51,24 @@ def algo_concon(objects_list:list, backpack_size:float): # 19 op
 
 
 
-def brute_force_avec_Obj_aux(objects_list:list, backpack_size:float):
+def brute_force_binary(objects_list:list, backpack_size:float):
+    """
+    tests all the possible combinations and returns the bag with the highest score
+    :param objects_list: list oh Objects, the available objects to put in the bag
+    :param backpack_size: maximum bag mass/weight
+    :return:
+    """
     bags = []
     for i in range(2**len(objects_list)-1):
         bag = Bag()
-        binaire_sans_prefixe = bin(i)[2:].zfill(len(objects_list))
+        binaire_sans_prefixe = bin(i)[2:].zfill(len(objects_list)) # converts i to binary and adds 0s to fll up
         for j in range(len(objects_list)):
-            if(int(binaire_sans_prefixe[j]) == 1):
+            if(int(binaire_sans_prefixe[j]) == 1): # the 0s and 1s are used as booleans
                 bag.add(objects_list[j])
-        if(bag.weight <= (backpack_size+0.005)): # +epsilon pour l'erreur de float de python
+        if(bag.weight <= (backpack_size+0.005)): # +epsilon for python floating point error
             bags.append(bag)
-    return bags
+    return max(bags, key=lambda k: k.score)
 
-def brute_force(objects_list:list, backpack_size:float):
-    return max(brute_force_avec_Obj_aux(objects_list, backpack_size), key=lambda k: k.score)
 
 def glouton(objects_list:list, backpack_size:float):
     EPSILON = 0.00001
@@ -77,7 +82,7 @@ def glouton(objects_list:list, backpack_size:float):
 
 def branch(objects_list:list, backpack_size:float):
     root = BinaryTree(0)
-    root.create_tree(objs, 0.6)
+    root.create_tree(objs, backpack_size)
     vals = root.find_max()[1].get_parents_by_level()[1:]
     out = [obj for flag, obj in zip(vals, objs) if flag == 1]
 
@@ -130,13 +135,24 @@ if __name__ == '__main__':
         objs.append(o) # liste d'objets
 
 
+    # mesure des temps de calcul pour des poids de sac differents
+    C=[0.6, 2, 3, 4, 5, 6, 7]
+    times = []
 
-    start_time = time.time()
+    for val in C:
+        mvals = []
+        for i in range(3):
 
-    #best = brute_force(objs, 0.6)
-    # best = glouton(objs, 0.6)
-    best = branch(objs, 0.6)
+            start_time = time.time()
 
-    end_time = time.time()
-    best.print()
-    print(f'Temps d\'exécution en secondes pour la fonction : {(end_time - start_time) / 1}; en ms : {(end_time - start_time) * 1000 / 1}')
+            # best = brute_force_binary(objs, val)
+            # best = glouton(objs, val)
+            best = branch(objs, val)
+
+            end_time = time.time()
+            best.print()
+            mvals.append(end_time - start_time)
+        times.append(np.mean(mvals))
+    print(times)
+
+        #print(f'Temps d\'exécution en secondes pour la fonction : {(end_time - start_time) / 1}; en ms : {(end_time - start_time) * 1000 / 1}')

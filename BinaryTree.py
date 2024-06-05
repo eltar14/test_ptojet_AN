@@ -32,18 +32,12 @@ class BinaryTree():
         else:
             return False
 
-    def get_parents_with_side(self):
-        parents = []
-        node = self
-        while node.parent is not None:
-            if node.is_left_child():
-                parents.append((node.parent.data, 'gauche'))
-            else:
-                parents.append((node.parent.data, 'droit'))
-            node = node.parent
-        return parents
-
     def get_parents_by_level(self):
+        """
+        Returns a list of the the parents, 1 if they are a left child (we should put it in the bag) or a 0 if they're a
+        right child (we should ignore it).
+        :return: list of 0 and 1
+        """
         parents = [0] * (self.get_level() + 1)
         node = self
         while node.parent is not None:
@@ -64,6 +58,10 @@ class BinaryTree():
             self.left.print_tree(level+1)
 
     def find_max(self):
+        """
+        returns the max value and the instance of the node, in a tuple
+        :return:
+        """
         max_value = self.data
         max_node = self
         if self.left is not None:
@@ -76,7 +74,7 @@ class BinaryTree():
             if result[0] > max_value:
                 max_value = result[0]
                 max_node = result[1]
-        return (max_value, max_node)
+        return max_value, max_node
 
     def create_tree(self, objects_list:list, backpack_size:float, util=0, weight = 0):
         if self.get_level() >= len(objects_list) :

@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 import numpy as np
+from Object import Object
 
 
 # dimensions :
@@ -10,7 +11,7 @@ largeur = 2.294
 hauteur = 2.567
 
 
-class Object:
+"""class Object:
     def __init__(self,name,  lon, lar, h):
         self.name = name
         self.length = lon
@@ -18,7 +19,7 @@ class Object:
         self.height = h
 
     def print(self):
-        print(f'name : {self.name} ; lon : {self.length} ; lar : {self.width} ; h : {self.height}') # ; lar : {self.width} ; h : {self.hauteur}
+        print(f'name : {self.name} ; lon : {self.length} ; lar : {self.width} ; h : {self.height}') # ; lar : {self.width} ; h : {self.hauteur}"""
         
         
 class Saucisse:
@@ -62,8 +63,6 @@ class Shelf():
         # remaining height ? à faire en dehors car depend des shelf en dessous et dessus
         self.height = obj.height if obj.height > self.height else self.height # height of the Shelf
 
-    def get_remaining_width(self):
-        return self.width - (sum(sh.width for sh in self.saucisses))
 
     def print(self): # print les saucisses
         print(f'SHELF  ===:::===   Longueur : {self.length} ; largeur : {self.width}')
@@ -111,7 +110,7 @@ def la3d(objects:list[Object]):
     w.add(shel)
     wagons.append(w)
 
-    for o in objects:
+    for index, o in enumerate(objects):
         placed = False
         for wagon in wagons:
             for shelf in wagon.shelves:
@@ -119,12 +118,14 @@ def la3d(objects:list[Object]):
                     if  o.length <= saucisse.remaining_length and o.width <= (shelf.get_remaining_width() + saucisse.width) and o.height <= (wagon.get_remaining_height() + shelf.height):
                         saucisse.add(o)
                         placed = True
-                        #print("a")
+                        print(index, "a")
 
                     if placed:
                         break
                 if placed:
                     break
+            if placed:
+                break
             # if placed:
             #     break
         if not placed: # add saucisse ?  need new saucisse
@@ -135,7 +136,7 @@ def la3d(objects:list[Object]):
                         s.add(o)
                         shelf.add(s)
                         placed = True
-                        #print("b")
+                        print(index, "b")
                     if placed:
                         break
                 if placed:
@@ -153,7 +154,7 @@ def la3d(objects:list[Object]):
                     wagon.add(s)
 
                     placed = True
-                    #print("c")
+                    print(index, "c")
                 if placed:
                     break
 
@@ -169,7 +170,7 @@ def la3d(objects:list[Object]):
 
             wagons.append(w)
             placed = True
-            #print("d")
+            print(index, "d")
 
     return wagons
 

@@ -139,7 +139,7 @@ class Wagon:
        plt.axis('equal')
        plt.show()"""
 
-def plot_wagons(wagons:list):
+"""def plot_wagons(wagons:list):
     plots = []
     for i, wagon in enumerate(wagons):
         plots[i] = fig, ax = plt.subplots()
@@ -155,9 +155,9 @@ def plot_wagons(wagons:list):
                 ax.add_patch(Rectangle((len, wid), obj.length, obj.width, edgecolor='orange', linewidth=2))
         break
 
-    plt.plot()
+    plt.plot()"""
 
-def plot_wagon(wagon, iter = 0):
+def plot_wagon(wagon):
         fig, ax = plt.subplots(1, 1)
 
         # Définir les limites de la figure pour correspondre à la taille du wagon
@@ -175,6 +175,49 @@ def plot_wagon(wagon, iter = 0):
         plt.axis('equal')
         plt.show()
 
+
+def plot_wagons(wagons, n_cols=5):
+    num_wagons = len(wagons)
+    n_rows = (num_wagons + n_cols - 1) // n_cols  # nb of lines needed
+
+    fig, axs = plt.subplots(n_rows, n_cols, figsize=(n_cols * 6, n_rows * 4))
+
+    # if only one wagon ax isnt a list so we convert it into one
+    if num_wagons == 1:
+        axs = [[axs]]
+    elif n_rows == 1:
+        axs = [axs]
+    elif n_cols == 1:
+        axs = [[ax] for ax in axs]
+
+    
+    wagon_length = 11.583
+    wagon_width = 2.294
+
+    for w_idx, (ax, wagon) in enumerate(zip(axs.flat, wagons)):
+        ax.set_xlim(0, wagon_length)
+        ax.set_ylim(0, wagon_width)
+
+        # draw wagon edges
+        ax.add_patch(Rectangle((0, 0), wagon_length, wagon_width, edgecolor="black", facecolor='none'))
+
+        for sn, shelf in enumerate(wagon.content):
+            for en, obj in enumerate(shelf.content):
+                obj_len = sum(o.length for o in shelf.content[:en])  # somme des longueurs jusqu'à l'index en
+                obj_wid = sum(o.width for o in wagon.content[:sn])  # hauteur des shelves en dessous
+                col = (np.random.random(), np.random.random(), np.random.random())
+                ax.add_patch(Rectangle((obj_len, obj_wid), obj.length, obj.width, facecolor=col))
+
+        ax.set_aspect('equal')
+        ax.set_title(f'Wagon {w_idx + 1}') # Wagon n
+
+        ax.axis('off')
+    
+    for ax in axs.flat[num_wagons:]: # Supprimer les axes vides
+        ax.set_visible(False)
+
+    plt.tight_layout()
+    plt.show()
 def plot_train(wagons, len):
     fig, ax = plt.subplots(1, len)
     for index, wagon in enumerate(wagons):
@@ -274,9 +317,11 @@ if __name__ == '__main__':
     #plot_train(b, len(b))
     #plot_wagon2(b[0])
     aaaaa = 0
-    for w in b:
+
+    plot_wagons(b)
+    """for w in b:
         plot_wagon(w)
-        aaaaa+=1
+        aaaaa+=1"""
 
     """start_time = time.time()
     le2d(a)

@@ -39,7 +39,7 @@ class Saucisse:
         self.height = obj.height if obj.height > self.height else self.height
 
     def print(self):
-        print(f'Longueur : {self.length} ; largeur : {self.width} ; hauteur : {self.height} ; remaining length inside : {self.remaining_length}')
+        print(f'Saucisse - Longueur : {self.length} ; largeur : {self.width} ; hauteur : {self.height} ; remaining length inside : {self.remaining_length}')
         for obj in self.content:
             obj.print()
         print()
@@ -83,7 +83,7 @@ class Wagon:
 
         self.remaining_height = self.height
 
-    def add(self, obj:Shelf): # to add a shelf
+    def add(self, obj:Shelf|Saucisse): # to add a shelf
         self.shelves.append(obj)
         self.remaining_height -= obj.height # hauteur restante pour une shelf
 
@@ -110,32 +110,32 @@ def la3d(objects:list[Object]):
     w = Wagon()
     w.add(shel)
     wagons.append(w)
-    placed = False
+
     for o in objects:
-        print("OOOOOb")
+        placed = False
         for wagon in wagons:
             for shelf in wagon.shelves:
                 for saucisse in shelf.saucisses:
                     if  o.length <= saucisse.remaining_length and o.width <= (shelf.get_remaining_width() + saucisse.width) and o.height <= (wagon.get_remaining_height() + shelf.height):
                         saucisse.add(o)
                         placed = True
-                        print("a")
+                        #print("a")
 
                     if placed:
                         break
                 if placed:
                     break
-            if placed:
-                break
+            # if placed:
+            #     break
         if not placed: # add saucisse ?  need new saucisse
             for wagon in wagons:
                 for shelf in wagon.shelves:
-                    if o.width <= shelf.get_remaining_width() + shelf.width and o.height <= (wagon.get_remaining_height() + shelf.height):
+                    if o.width <= shelf.get_remaining_width() and o.height <= (wagon.get_remaining_height() + shelf.height):
                         s = Saucisse()
                         s.add(o)
                         shelf.add(s)
                         placed = True
-                        print("b")
+                        #print("b")
                     if placed:
                         break
                 if placed:
@@ -153,7 +153,7 @@ def la3d(objects:list[Object]):
                     wagon.add(s)
 
                     placed = True
-                    print("c")
+                    #print("c")
                 if placed:
                     break
 
@@ -169,7 +169,7 @@ def la3d(objects:list[Object]):
 
             wagons.append(w)
             placed = True
-            print("d")
+            #print("d")
 
     return wagons
 
@@ -192,9 +192,9 @@ def xlsx_to_object_list(path:str):
 
 if __name__ == '__main__':
     a = xlsx_to_object_list("Données marchandises.xlsx")
-    print(len(a[:3]))
-    b = la3d(a[:3])
+    b = la3d(a)
 
 
+    print(f'Wagons : {len(b)}')
     for w in b:
         w.print()

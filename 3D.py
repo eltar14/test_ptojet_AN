@@ -23,6 +23,9 @@ hauteur = 2.567
         
         
 class Saucisse:
+    """
+    author : A
+    """
     def __init__(self):
         CONTAINER_LENGTH = 11.583
         
@@ -47,6 +50,9 @@ class Saucisse:
 
 
 class Shelf():
+    """
+    author : A
+    """
     def __init__(self):
         CONTAINER_LENGTH = 11.583
         CONTAINER_WIDTH = 2.294
@@ -74,6 +80,9 @@ class Shelf():
         return self.width - (sum(sauc.width for sauc in self.saucisses))
 
 class Wagon:
+    """
+    author : A
+    """
     def __init__(self):
         self.shelves = [] # liste des shelves dans le wagon
         self.length = 11.583 # capacity
@@ -101,6 +110,12 @@ class Wagon:
 
 
 def la3d(objects:list[Object]):
+    """
+
+    author : A
+    :param objects:
+    :return:
+    """
     wagons = []  # liste des wagons
     
     sauc = Saucisse()
@@ -174,7 +189,12 @@ def la3d(objects:list[Object]):
 
     return wagons
 
-
+def fill_wagon_3d_offline(objects:list[Object]):
+    """
+    author : A
+    """
+    objects = sorted(objects, key=lambda k: [k.width, k.length, k.height], reverse=True)  # better
+    return la3d(objects)
 def xlsx_to_object_list(path:str):
     """
     author : A
@@ -193,9 +213,11 @@ def xlsx_to_object_list(path:str):
 
 if __name__ == '__main__':
     a = xlsx_to_object_list("Données marchandises.xlsx")
-    b = la3d(a)
+    #b = la3d(a)
+    b = fill_wagon_3d_offline(a)
 
 
-    print(f'Wagons : {len(b)}')
+
     for w in b:
         w.print()
+    print(f'Wagons : {len(b)}')

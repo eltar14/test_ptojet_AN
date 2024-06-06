@@ -1,4 +1,7 @@
 class Object:
+    """
+        author : A
+    """
     def __init__(self,name,  lon, lar, h):
         self.name = name
         self.length = lon

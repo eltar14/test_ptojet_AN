@@ -8,6 +8,7 @@
 # |______/       \_______/|__/|__/ |__/ |__/ \_______/|__/  |__/|_______/ |__/ \______/ |__/  |__/
 
 import pandas as pd
+from Object import Object
 # dimensions :
 longueur = 11.583
 largeur = 2.294
@@ -15,7 +16,7 @@ hauteur = 2.567
 
 
 # Algo de best fit : mettre dans le bin ou il restera le moins de capacite apres l'operation, minimiser la capacite restante
-class Object:
+"""class Object:
     def __init__(self,name,  lon, lar, h):
         self.name = name
         self.length = lon
@@ -23,10 +24,10 @@ class Object:
         self.height = h
 
     def print(self):
-        print(f'name : {self.name} ; lon : {self.length} ') # ; lar : {self.width} ; h : {self.hauteur}
+        print(f'name : {self.name} ; lon : {self.length} ') # ; lar : {self.width} ; h : {self.hauteur}"""
 
 
-class Shelf:  # 2D
+"""class Shelf:
     def __init__(self):
         CONTAINER_LENGTH = 11.583
         self.content = []  # des objects
@@ -44,10 +45,11 @@ class Shelf:  # 2D
         print(f'Longueur : {self.length} ; largeur : {self.width} ; remaining : {self.remaining_length}')
         for obj in self.content:
             obj.print()
-        print()
+        print()"""
 
 
-def le2d(objects:list):
+"""def le2d(objects:list):
+
     wagons = [] # liste des wagons
     w = Wagon()
     w.add_shelf(Shelf())
@@ -74,27 +76,17 @@ def le2d(objects:list):
             s.add(o)
             w.add_shelf(s)
             wagons.append(w)
-    return wagons
+    return wagons"""
 
-
-
-
-            # creer une nouvelle shelf ?
-            # sinon creer nouveau wagon + nv shelf
-
-    """
-    wagon.content.append(Shelf())
-    for s in wagon.content:
-        s.print()
-
-    for wagon in w
-    """
 
 
 
 
 
 class Wagon:
+    """
+    author : A
+    """
     def __init__(self):
         self.content = [] # soit des shelf soit directement des objets
         self.length = 11.583 # capacity

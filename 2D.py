@@ -11,6 +11,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 import numpy as np
+from Object import Object
 
 # dimensions :
 longueur = 11.583
@@ -19,7 +20,7 @@ hauteur = 2.567
 
 
 # Algo de first fit : mettre dans le premier trou qui correspond
-class Object:
+"""class Object:
     def __init__(self,name,  lon, lar, h):
         self.name = name
         self.length = lon
@@ -27,10 +28,13 @@ class Object:
         self.height = h
 
     def print(self):
-        print(f'name : {self.name} ; lon : {self.length} ; lar : {self.width}') # ; lar : {self.width} ; h : {self.hauteur}
+        print(f'name : {self.name} ; lon : {self.length} ; lar : {self.width}') # ; lar : {self.width} ; h : {self.hauteur}"""
 
 
 class Shelf:  # 2D
+    """
+    author : A
+    """
     def __init__(self):
         CONTAINER_LENGTH = 11.583
         self.content = []  # des objects
@@ -51,6 +55,9 @@ class Shelf:  # 2D
         print()
 
 class Wagon:
+    """
+    author : A
+    """
     def __init__(self):
         self.content = [] # soit des shelf soit directement des objets
         self.length = 11.583 # capacity
@@ -158,25 +165,38 @@ class Wagon:
     plt.plot()"""
 
 def plot_wagon(wagon):
-        fig, ax = plt.subplots(1, 1)
+    """
 
-        # Définir les limites de la figure pour correspondre à la taille du wagon
-        ax.set_xlim(0, 11583)
-        ax.set_ylim(0, 2294)
-        ax.add_patch(Rectangle((0, 0), 11.583, 2.294, edgecolor="black", facecolor='none'))
+    author : A
+    :param wagon:
+    :return:
+    """
+    fig, ax = plt.subplots(1, 1)
 
-        for sn, shelf in enumerate(wagon.content):
-            for en, obj in enumerate(shelf.content):
-                len = sum(o.length for o in shelf.content[:en]) # somme des longueurs jusqu a l index en
-                wid = sum(o.width for o in wagon.content[:sn]) # hauteur des shelves en dessous
-                col = (np.random.random(), np.random.random(), np.random.random())
-                ax.add_patch(Rectangle((len, wid), obj.length, obj.width, facecolor=col))
+    # Définir les limites de la figure pour correspondre à la taille du wagon
+    ax.set_xlim(0, 11583)
+    ax.set_ylim(0, 2294)
+    ax.add_patch(Rectangle((0, 0), 11.583, 2.294, edgecolor="black", facecolor='none'))
 
-        plt.axis('equal')
-        plt.show()
+    for sn, shelf in enumerate(wagon.content):
+        for en, obj in enumerate(shelf.content):
+            len = sum(o.length for o in shelf.content[:en]) # somme des longueurs jusqu a l index en
+            wid = sum(o.width for o in wagon.content[:sn]) # hauteur des shelves en dessous
+            col = (np.random.random(), np.random.random(), np.random.random())
+            ax.add_patch(Rectangle((len, wid), obj.length, obj.width, facecolor=col))
+
+    plt.axis('equal')
+    plt.show()
 
 
 def plot_wagons(wagons, n_cols=5):
+    """
+
+    author : A
+    :param wagons:
+    :param n_cols:
+    :return:
+    """
     num_wagons = len(wagons)
     n_rows = (num_wagons + n_cols - 1) // n_cols  # nb of lines needed
 
@@ -218,7 +238,7 @@ def plot_wagons(wagons, n_cols=5):
 
     plt.tight_layout()
     plt.show()
-def plot_train(wagons, len):
+"""def plot_train(wagons, len):
     fig, ax = plt.subplots(1, len)
     for index, wagon in enumerate(wagons):
         print(index)
@@ -235,9 +255,15 @@ def plot_train(wagons, len):
                 ax[index].add_patch(Rectangle((len, wid), obj.length, obj.width, facecolor=col))
 
         plt.axis('equal')
-    plt.show()
+    plt.show()"""
 
 def fill_Wagon_2d_online(objects:list):
+    """
+
+    author : A
+    :param objects:
+    :return:
+    """
     wagons = [] # liste des wagons
     w = Wagon()
     w.add_shelf(Shelf())
@@ -276,7 +302,16 @@ def fill_Wagon_2d_online(objects:list):
     return wagons
 
 def fill_Wagon_2d_offline(objects:list):
-    objects = sorted(objects, key=lambda k: k.width, reverse=True)  # par ordre décroissant
+    """
+
+    author : A
+    :param objects:
+    :return:
+    """
+    #objects = sorted(objects, key=lambda k: k.width, reverse=True)  # par ordre décroissant
+    objects = sorted(objects, key=lambda k: [k.width, k.length], reverse=True)  # better
+
+    # key = lambda x: (x[column_number_1], x[column_number_2])
     return fill_Wagon_2d_online(objects)
 
 def xlsx_to_object_list(path:str):

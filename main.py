@@ -73,6 +73,7 @@ def branch(objects_list:list, backpack_size:float):
     :param backpack_size:
     :return:
     """
+    # TODO objs != objects_list ???
     root = BinaryTree(0)
     root.create_tree(objs, backpack_size)
     vals = root.find_max()[1].get_parents_by_level()[1:]

@@ -74,13 +74,14 @@ class Wagon:
         print()
         print()
         print()
-def fill_Wagon_2d_online(objects:list):
+"""def fill_Wagon_2d_online(objects:list):
     wagons = [] # liste des wagons
     w = Wagon()
     w.add_shelf(Shelf())
     wagons.append(w)
-
+    index = 0
     for o in objects:
+
         placed = False
         for wagon in wagons:
             for shelf in wagon.content :
@@ -95,13 +96,15 @@ def fill_Wagon_2d_online(objects:list):
                     s.add(o)
                     wagon.add_shelf(s)
                     placed = True
+                    break
         if not placed:
             w = Wagon()
             s = Shelf()
             s.add(o)
             w.add_shelf(s)
             wagons.append(w)
-    return wagons
+        index +=1
+    return wagons"""
 
 
 
@@ -155,7 +158,7 @@ def plot_wagons(wagons:list):
     plt.plot()
 
 def plot_wagon(wagon, iter = 0):
-        fig, ax = plt.subplots()
+        fig, ax = plt.subplots(1, 1)
 
         # Définir les limites de la figure pour correspondre à la taille du wagon
         ax.set_xlim(0, 11583)
@@ -172,6 +175,24 @@ def plot_wagon(wagon, iter = 0):
         plt.axis('equal')
         plt.show()
 
+def plot_train(wagons, len):
+    fig, ax = plt.subplots(1, len)
+    for index, wagon in enumerate(wagons):
+        print(index)
+        # Définir les limites de la figure pour correspondre à la taille du wagon
+        #ax[index].set_xlim(0, 11583)
+        #ax[index].set_ylim(0, 2294)
+        ax[index].add_patch(Rectangle((0, 0), 11.583, 2.294, edgecolor="black", facecolor='none'))
+
+        for sn, shelf in enumerate(wagon.content):
+            for en, obj in enumerate(shelf.content):
+                len = sum(o.length for o in shelf.content[:en])  # somme des longueurs jusqu a l index en
+                wid = sum(o.width for o in wagon.content[:sn])  # hauteur des shelves en dessous
+                col = (np.random.random(), np.random.random(), np.random.random())
+                ax[index].add_patch(Rectangle((len, wid), obj.length, obj.width, facecolor=col))
+
+        plt.axis('equal')
+    plt.show()
 
 def fill_Wagon_2d_online(objects:list):
     wagons = [] # liste des wagons
@@ -246,9 +267,11 @@ if __name__ == '__main__':
 
     b = fill_Wagon_2d_offline(a)
     print(f'{len(b)} wagons')
-    for wagon in b:
-        wagon.print()
+    """for wagon in b:
+        wagon.print()"""
 
+    print(type(b))
+    #plot_train(b, len(b))
     #plot_wagon2(b[0])
     aaaaa = 0
     for w in b:

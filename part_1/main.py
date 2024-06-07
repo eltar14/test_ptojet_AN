@@ -39,7 +39,7 @@ def brute_force_binary(objects_list:list, backpack_size:float):
     :return:
     """
     bags = []
-    for i in range(2**len(objects_list)-1):
+    for i in range(2**(len(objects_list))-1):
         bag = Bag()
         binaire_sans_prefixe = bin(i)[2:].zfill(len(objects_list)) # converts i to binary and adds 0s to fll up
         for j in range(len(objects_list)):
@@ -57,13 +57,22 @@ def glouton(objects_list:list, backpack_size:float):
     :param backpack_size:
     :return:
     """
-    EPSILON = 0.00001
-    sorted_by_ratio = sorted(objects_list, key=lambda k: k.ratio(), reverse=True)
     bag = Bag()
-    i = 0
-    while((bag.weight + sorted_by_ratio[i].masse) < backpack_size + EPSILON):
-        bag.add(sorted_by_ratio[i])
-        i+=1
+    if sum(o.masse for o in objects_list):
+        for o in objects_list:
+            bag.add(o)
+
+    else:
+        EPSILON = 0.00001
+        sorted_by_ratio = sorted(objects_list, key=lambda k: k.ratio(), reverse=True)
+
+        i = 0
+
+
+        while((bag.weight + sorted_by_ratio[i].masse) < backpack_size + EPSILON):
+            print(i)
+            bag.add(sorted_by_ratio[i])
+            i+=1
     return bag
 
 def branch(objs:list, backpack_size:float):
@@ -134,6 +143,8 @@ def dynamique(objets, maxmass):
     bag.weight /= 100
     bag.score /= 100
 
+    print(bag.weight)
+
     return bag
 
 
@@ -174,18 +185,19 @@ if __name__ == '__main__':
 
 
     # mesure des temps de calcul pour des poids de sac differents
-    C=[4] # 0.6, 2, 3, 4, 5, 6, 7
+    C=[0.6, 2, 3, 4] # 0.6, 2, 3, 4, 5, 6, 7
     times = []
 
     for val in C:
         mvals = []
-        for i in range(3):
 
+        for i in range(3):
             start_time = time.time()
 
             # best = brute_force_binary(objs, val)
-            # best = glouton(objs, val)
-            best = branch(objs, val)
+            best = glouton(objs, val)
+            #best = branch(objs, val)
+            #best = dynamique(objs, val)
 
             end_time = time.time()
             best.print()

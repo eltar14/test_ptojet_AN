@@ -1,8 +1,20 @@
+#   /$$$$$$              /$$ /$$                                             /$$
+#  /$$__  $$            | $$|__/                                            |__/
+# |__/  \ $$        /$$$$$$$ /$$ /$$$$$$/$$$$   /$$$$$$  /$$$$$$$   /$$$$$$$ /$$  /$$$$$$  /$$$$$$$   /$$$$$$$
+#    /$$$$$/       /$$__  $$| $$| $$_  $$_  $$ /$$__  $$| $$__  $$ /$$_____/| $$ /$$__  $$| $$__  $$ /$$_____/
+#   |___  $$      | $$  | $$| $$| $$ \ $$ \ $$| $$$$$$$$| $$  \ $$|  $$$$$$ | $$| $$  \ $$| $$  \ $$|  $$$$$$
+#  /$$  \ $$      | $$  | $$| $$| $$ | $$ | $$| $$_____/| $$  | $$ \____  $$| $$| $$  | $$| $$  | $$ \____  $$
+# |  $$$$$$/      |  $$$$$$$| $$| $$ | $$ | $$|  $$$$$$$| $$  | $$ /$$$$$$$/| $$|  $$$$$$/| $$  | $$ /$$$$$$$/
+#  \______/        \_______/|__/|__/ |__/ |__/ \_______/|__/  |__/|_______/ |__/ \______/ |__/  |__/|_______/
+
+
+
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 import numpy as np
 from Object import Object
+import time
 
 
 # dimensions :
@@ -10,20 +22,11 @@ longueur = 11.583
 largeur = 2.294
 hauteur = 2.567
 
-
-"""class Object:
-    def __init__(self,name,  lon, lar, h):
-        self.name = name
-        self.length = lon
-        self.width = lar
-        self.height = h
-
-    def print(self):
-        print(f'name : {self.name} ; lon : {self.length} ; lar : {self.width} ; h : {self.height}') # ; lar : {self.width} ; h : {self.hauteur}"""
         
         
 class Saucisse:
     """
+    Named saucisse because its a container that contains things, different name not to sonfuse it with Shelf
     author : A
     """
     def __init__(self):
@@ -71,7 +74,7 @@ class Shelf():
 
 
     def print(self): # print les saucisses
-        print(f'SHELF  ===:::===   Longueur : {self.length} ; largeur : {self.width}')
+        print(f'SHELF  ===:::===   Longueur : {self.length} ; largeur : {self.width} ; hauteur {self.height}')
         for sauc in self.saucisses:
             sauc.print()
         print()
@@ -109,8 +112,9 @@ class Wagon:
 
 
 
-def la3d(objects:list[Object]):
+def fill_wagon_3d_online(objects:list[Object]):
     """
+    Fills a train in 3 dimensions
 
     author : A
     :param objects:
@@ -133,7 +137,7 @@ def la3d(objects:list[Object]):
                     if  o.length <= saucisse.remaining_length and o.width <= (shelf.get_remaining_width() + saucisse.width) and o.height <= (wagon.get_remaining_height() + shelf.height):
                         saucisse.add(o)
                         placed = True
-                        print(index, "a")
+                        #print(index, "a")
 
                     if placed:
                         break
@@ -141,8 +145,8 @@ def la3d(objects:list[Object]):
                     break
             if placed:
                 break
-            # if placed:
-            #     break
+
+
         if not placed: # add saucisse ?  need new saucisse
             for wagon in wagons:
                 for shelf in wagon.shelves:
@@ -151,7 +155,7 @@ def la3d(objects:list[Object]):
                         s.add(o)
                         shelf.add(s)
                         placed = True
-                        print(index, "b")
+                        #print(index, "b")
                     if placed:
                         break
                 if placed:
@@ -169,7 +173,7 @@ def la3d(objects:list[Object]):
                     wagon.add(s)
 
                     placed = True
-                    print(index, "c")
+                    #print(index, "c")
                 if placed:
                     break
 
@@ -185,7 +189,7 @@ def la3d(objects:list[Object]):
 
             wagons.append(w)
             placed = True
-            print(index, "d")
+            #print(index, "d")
 
     return wagons
 
@@ -194,7 +198,7 @@ def fill_wagon_3d_offline(objects:list[Object]):
     author : A
     """
     objects = sorted(objects, key=lambda k: [k.width, k.length, k.height], reverse=True)  # better
-    return la3d(objects)
+    return fill_wagon_3d_online(objects)
 def xlsx_to_object_list(path:str):
     """
     author : A
@@ -213,8 +217,27 @@ def xlsx_to_object_list(path:str):
 
 if __name__ == '__main__':
     a = xlsx_to_object_list("Données marchandises.xlsx")
-    #b = la3d(a)
+    #b = fill_wagon_3d_online(a)
+
+    start = time.time()
     b = fill_wagon_3d_offline(a)
+    end = time.time()
+    delta = end - start
+    print(f'TIME ELAPSED : {delta}')
+
+    used_volume = 0
+    for wagon in b:
+        for shelf in wagon.shelves:
+            for saucisse in shelf.saucisses:
+                for item in saucisse.content:
+                    used_volume += item.length*item.width*item.height
+    print(f'Used volume : { used_volume}')
+    total_volume = len(b)*longueur*largeur*hauteur
+    print(f'Total volume : {total_volume}')
+
+    ratio_occupied_volume = used_volume/total_volume
+    print(f'Ratio used volume : {ratio_occupied_volume}')
+
 
 
 

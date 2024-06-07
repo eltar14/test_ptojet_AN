@@ -9,6 +9,7 @@
 
 import pandas as pd
 from Object import Object
+from tools import xlsx_to_object_list
 # dimensions :
 longueur = 11.583
 largeur = 2.294
@@ -16,71 +17,6 @@ hauteur = 2.567
 
 
 # Algo de best fit : mettre dans le bin ou il restera le moins de capacite apres l'operation, minimiser la capacite restante
-"""class Object:
-    def __init__(self,name,  lon, lar, h):
-        self.name = name
-        self.length = lon
-        self.width = lar
-        self.height = h
-
-    def print(self):
-        print(f'name : {self.name} ; lon : {self.length} ') # ; lar : {self.width} ; h : {self.hauteur}"""
-
-
-"""class Shelf:
-    def __init__(self):
-        CONTAINER_LENGTH = 11.583
-        self.content = []  # des objects
-        self.length = CONTAINER_LENGTH
-        self.width = 0 # largeur de la colonne, dépendra de ce qu'il y aura dedans
-        self.remaining_length = CONTAINER_LENGTH
-        # on verra la largeur disponible en dehors
-
-    def add(self, obj: Object):
-        self.content.append(obj)
-        self.remaining_length -= obj.length
-        self.width = obj.width if obj.width > self.width else self.width
-
-    def print(self):
-        print(f'Longueur : {self.length} ; largeur : {self.width} ; remaining : {self.remaining_length}')
-        for obj in self.content:
-            obj.print()
-        print()"""
-
-
-"""def le2d(objects:list):
-
-    wagons = [] # liste des wagons
-    w = Wagon()
-    w.add_shelf(Shelf())
-    wagons.append(w)
-
-    for o in objects:
-        placed = False
-        for wagon in wagons:
-            for shelf in wagon.content :
-                if((o.width <= (wagon.get_remaining_width() + shelf.width)) and (o.length <= shelf.remaining_length)) : # sum(instance.value for instance in instances)
-                    shelf.add(o)
-                    placed = True
-                    break
-        if not placed:
-            for wagon in wagons:
-                if (wagon.get_remaining_width() >= o.width) and (wagon.length >= o.width):
-                    s = Shelf()
-                    s.add(o)
-                    wagon.add_shelf(s)
-                    placed = True
-        if not placed:
-            w = Wagon()
-            s = Shelf()
-            s.add(o)
-            w.add_shelf(s)
-            wagons.append(w)
-    return wagons"""
-
-
-
-
 
 
 class Wagon:
@@ -88,7 +24,7 @@ class Wagon:
     author : A
     """
     def __init__(self):
-        self.content = [] # soit des shelf soit directement des objets
+        self.content = []
         self.length = 11.583 # capacity
         self.width = 2.294
         self.height = 2.567
@@ -113,35 +49,22 @@ class Wagon:
 
 
 
-def xlsx_to_object_list(path:str):
-    """
-    author : A
-    :param path:
-    :return:
-    """
-    data = pd.read_excel(path)
-    data = data.values.tolist()
-    objs = []
-    for elt in data:
-        #print(elt)
-        o = Object(*elt[1:])
-        objs.append(o)  # liste d'objets
-    return objs
+
 
 
 def fill_Wagon_1d_online(objects:list):
     """
+    fills a 1 dimentional train with objects
+    returns an array of Wagon
     author : A
     :param objects:
     :return:
     """
     wagons = []
     wagons.append(Wagon())
-    loop_count = 0
 
     for o in objects:
-        loop_count += 1
-        remaining_per_w_after = []
+        remaining_per_w_after = [] # remainng width per wagon, index is wagon index
         for wagon in wagons: # calcul des capacités par w apres avoir ajoute o
             remaining_per_w_after.append(wagon.remaining_length - o.length)
 
@@ -178,12 +101,20 @@ if __name__ == '__main__':
     print(min(i for i in a if i > 0))
     """
 
-
+    start = time.time()
     b = fill_Wagon_1d_offline(a)
+    end = time.time()
+    delta = end-start
+    print(f'TIME ELAPSED : { delta}')
     print(f'{len(b)} wagons')
     for wagon in b:
         wagon.print()
+    rest = sum(w.remaining_length for w in b)
+    print (rest)
+    print(f'len train : {len(b)*longueur}')
 
+    ratio_remplissage = (len(b)*longueur-rest)/(len(b)*longueur)
+    print(f'ratio remplissage : {ratio_remplissage}')
     """start_time = time.time()
     le2d(a)
     end_time = time.time()

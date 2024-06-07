@@ -58,7 +58,7 @@ def glouton(objects_list:list, backpack_size:float):
     :return:
     """
     bag = Bag()
-    if sum(o.masse for o in objects_list):
+    if sum(o.masse for o in objects_list) < backpack_size:
         for o in objects_list:
             bag.add(o)
 

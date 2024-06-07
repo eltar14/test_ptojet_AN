@@ -7,7 +7,7 @@ from BinaryTree import BinaryTree
 import numpy as np
 
 
-
+# PARTIE 1
 
 def algo_concon(objects_list:list, backpack_size:float): # 19 op
     """
@@ -66,7 +66,7 @@ def glouton(objects_list:list, backpack_size:float):
         i+=1
     return bag
 
-def branch(objects_list:list, backpack_size:float):
+def branch(objs:list, backpack_size:float):
     """
     author : A
     :param objects_list:

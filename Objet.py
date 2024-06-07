@@ -10,6 +10,7 @@
 #                                                                          |  $$$$$$/
 #                                                                           \______/
 
+# pour partie 1 seulement
 
 import math
 class Objet:
